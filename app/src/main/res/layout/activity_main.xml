@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.playaudiotest.MainActivity"
+    android:weightSum="1">
+
+
+    <Button
+        android:id="@+id/button_list1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="50px"
+        android:text="生生-林俊杰.mp3"/>
+
+    <Button
+        android:id="@+id/button_list2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="50px"
+        android:text="惊天动地-金玟岐.mp3"/>
+
+    <Button
+        android:id="@+id/button_list3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="50px"
+        android:text="失落沙洲-徐佳莹.mp3"/>
+
+    <Button
+        android:id="@+id/button_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="play"
+        />
+
+    <Button
+        android:id="@+id/button_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="pause"
+        />
+
+    <Button
+        android:id="@+id/button_stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="stop"
+        />
+
+    <TextView
+        android:id="@+id/textView_musicName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="75px"
+        android:text="歌曲名"
+        />
+
+    <Button
+        android:id="@+id/button_musicList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="播放列表"/>
+</LinearLayout>
