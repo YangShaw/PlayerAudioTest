@@ -16,15 +16,12 @@ import android.widget.Toast;
 
 import java.io.File;
 
-import static android.R.attr.button;
-import static com.example.playaudiotest.R.id.button_list1;
-import static com.example.playaudiotest.R.id.button_list2;
-import static com.example.playaudiotest.R.id.button_list3;
+
 import static com.example.playaudiotest.R.id.button_musicList;
 import static com.example.playaudiotest.R.id.button_pause;
 import static com.example.playaudiotest.R.id.button_play;
 import static com.example.playaudiotest.R.id.button_stop;
-import static com.example.playaudiotest.R.id.textView_musicName;
+
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -33,9 +30,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String string_musicPath = "musiclist/";
     private String string_musicName = "惊天动地-金玟岐.mp3";
     private TextView textView_musicName;
-    private Button button_list1;
-    private Button button_list2;
-    private Button button_list3;
     private String string_musicPlay="当前播放：";
     private String string_musicPause="当前暂停：";
     private String string_musicStop="歌曲名";
@@ -51,16 +45,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button button_stop = (Button) findViewById(R.id.button_stop);
         Button button_musicList = (Button) findViewById(R.id.button_musicList);
 
-        button_list1=(Button) findViewById(R.id.button_list1);
-        button_list2=(Button) findViewById(R.id.button_list2);
-        button_list3=(Button) findViewById(R.id.button_list3);
-
         button_play.setOnClickListener(this);
         button_pause.setOnClickListener(this);
         button_stop.setOnClickListener(this);
-        button_list1.setOnClickListener(this);
-        button_list2.setOnClickListener(this);
-        button_list3.setOnClickListener(this);
         button_musicList.setOnClickListener(this);
 
 
@@ -72,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ActivityCompat.requestPermissions(MainActivity.this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);    //运行时权限申请，申请访问SD卡的权限
         } else {
-            Toast.makeText(this, "onCreate..", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "onCreate..", Toast.LENGTH_SHORT).show();
             initMediaPlayer();  //初始化播放器
         }
 

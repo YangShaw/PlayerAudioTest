@@ -20,6 +20,15 @@
         </activity>
         <activity android:name=".MusicActivity">
         </activity>
+
+        <service
+            android:name=".MusicService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.playaudiotest.MUSIC_SERVICE" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

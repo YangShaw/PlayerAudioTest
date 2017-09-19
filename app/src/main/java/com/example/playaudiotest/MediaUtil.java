@@ -33,6 +33,9 @@ public class MediaUtil {
 
         return mp3Infos;
     }
+    public static List<Mp3> getMp3DB(Context context){
+        return null;
+    }
 
     public static List<Mp3> getMp3(Context context){
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
