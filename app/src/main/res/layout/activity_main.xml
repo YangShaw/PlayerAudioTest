@@ -36,6 +36,18 @@
         android:layout_height="wrap_content"
         android:text="play"
         />
+    <Button
+        android:id="@+id/button_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="next"
+        />
+    <Button
+        android:id="@+id/button_previous"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="previous"
+        />
 
     <Button
         android:id="@+id/button_pause"
@@ -61,9 +73,22 @@
         android:text="歌曲名"
         />
 
+    <TextView
+        android:id="@+id/textView_artist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="75px"
+        android:text="歌手名"
+        />
+
     <Button
         android:id="@+id/button_musicList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="播放列表"/>
+        android:text="房主"/>
+    <Button
+        android:id="@+id/button_musicList2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="用户"/>
 </LinearLayout>

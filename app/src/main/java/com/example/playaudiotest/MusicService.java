@@ -70,7 +70,11 @@ public class MusicService extends Service {
         path=intent.getStringExtra("url");//获取歌曲路径
         musicPosition=intent.getIntExtra("musicPosition",1);//获取歌曲位置
         msg=intent.getIntExtra("MSG",0);//获取播放信息
-        if (msg == Constant.PLAY_MSG) {	//直接播放音乐
+
+        if (msg == Constant.INIT_MSG){
+            init();
+            play();
+        } else if (msg == Constant.PLAY_MSG) {	//直接播放音乐
             play();
         } else if (msg == Constant.PAUSE_MSG) {	//暂停
             pause();
@@ -79,8 +83,10 @@ public class MusicService extends Service {
 //        } else if (msg == AppConstant.PlayerMsg.CONTINUE_MSG) {	//继续播放
 //            resume();
         } else if (msg == Constant.PREVIOUS_MSG) {	//上一首
+            init();
             previous();
         } else if (msg == Constant.NEXT_MSG) {		//下一首
+            init();
             next();
 //        } else if (msg == AppConstant.PlayerMsg.PROGRESS_CHANGE) {	//进度更新
 //            currentTime = intent.getIntExtra("progress", -1);
@@ -93,20 +99,24 @@ public class MusicService extends Service {
 
     }
 
-    /**
-     * 播放音乐
-     */
-    private void play() {
-        try {
+    private void init(){
+        try{
             mediaPlayer.reset();// 把各项参数恢复到初始状态
             File file = new File(path);    //创建file来指定音频文件的路径
             FileInputStream fis = new FileInputStream(file);
             mediaPlayer.setDataSource(fis.getFD());//传入歌曲地址
-
             mediaPlayer.prepare(); // 进行缓冲
-            mediaPlayer.start();
-        } catch (Exception e) {
+        }   catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 播放音乐
+     */
+    private void play() {
+        if(mediaPlayer!=null && !mediaPlayer.isPlaying()){
+            mediaPlayer.start();
         }
     }
 

@@ -38,6 +38,7 @@ import static com.example.playaudiotest.R.id.imageView_play;
 import static com.example.playaudiotest.R.id.imageView_previous;
 import static com.example.playaudiotest.R.id.textView_musicName;
 import static com.example.playaudiotest.R.id.textView_title;
+import static com.example.playaudiotest.R.id.title;
 
 public class MusicActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
@@ -54,11 +55,16 @@ public class MusicActivity extends AppCompatActivity implements View.OnClickList
     private ImageView imageView_previous;
     private MarqueeTextView marqueeTextView_musicTitle;
 
+    private String title="无音乐";
+    private String artist="无歌手";
+
     private MarqueeTextView marqueeTextView_musicArtist;
     private boolean isFirstTime = true;//是否是第一次播放
     private boolean isPlaying; // 正在播放
 
     private boolean isPause; // 暂停
+
+    private Button button_back;
 
     private int duration;//时长
 
@@ -92,6 +98,16 @@ public class MusicActivity extends AppCompatActivity implements View.OnClickList
         // 注册BroadcastReceiver
 //        registerReceiver(homeReceiver, filter);
 
+        Intent intent=getIntent();
+        if(intent!=null){
+            title=intent.getStringExtra("title");
+            artist=intent.getStringExtra("artist");
+            musicPosition=intent.getIntExtra("musicPosition",1);
+        }
+
+        marqueeTextView_musicTitle.setText(title);
+        marqueeTextView_musicArtist.setText(artist);
+
 
 
         if (ContextCompat.checkSelfPermission(MusicActivity.this,
@@ -99,7 +115,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnClickList
             ActivityCompat.requestPermissions(MusicActivity.this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);    //运行时权限申请，申请访问SD卡的权限
         } else {
-            Toast.makeText(this, "onCreate..", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "onCreate..", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -122,24 +138,39 @@ public class MusicActivity extends AppCompatActivity implements View.OnClickList
 //
 //    }
 
+    @Override
+    public void onBackPressed(){
+        Intent intent=new Intent(this,MainActivity.class);
+        intent.putExtra("title",mp3Infos.get(musicPosition).getTitle());
+        intent.putExtra("artist",mp3Infos.get(musicPosition).getArtist());
+        intent.putExtra("musicPosition",musicPosition);
+        startActivity(intent);
+//        finish();
+    }
+
     private void findViewById(){
         imageView_play = (ImageView) findViewById(R.id.imageView_play);
         imageView_next=(ImageView)findViewById(R.id.imageView_next);
         imageView_previous=(ImageView)findViewById(R.id.imageView_previous);
         marqueeTextView_musicTitle = (MarqueeTextView) findViewById(R.id.music_title);
         marqueeTextView_musicArtist = (MarqueeTextView) findViewById(R.id.music_artist);
+        button_back=(Button)findViewById(R.id.button_back);
     }
 
     private void setOnClickListener(){
         imageView_play.setOnClickListener(this);
         imageView_next.setOnClickListener(this);
         imageView_previous.setOnClickListener(this);
+        button_back.setOnClickListener(this);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //        ListView listView = (ListView) parent;
         musicPosition=position; //  获取列表序号就可以，知道是哪一首在播放
+        isFirstTime=false;
+        isPlaying=true;
+        isPause=false;
         itemPlay(musicPosition);
 //        setPosition(musicPosition,listView_musicList);
     }
@@ -148,23 +179,23 @@ public class MusicActivity extends AppCompatActivity implements View.OnClickList
     /**
      * 此方法通过传递列表点击位置来获取mp3Info对象
      *
-     * @param listPosition
+     * @param musicPosition
      */
-    public void itemPlay(int listPosition) {
+    public void itemPlay(int musicPosition) {
         if (mp3Infos != null) {
-            Mp3 mp3Info = mp3Infos.get(listPosition);
-            marqueeTextView_musicTitle.setText(mp3Info.getTitle()); // 这里显示标题
-            marqueeTextView_musicArtist.setText(mp3Info.getArtist());
+            Mp3 mp3Info = mp3Infos.get(musicPosition);
+            title=mp3Info.getTitle();
+            artist=mp3Info.getArtist();
+            marqueeTextView_musicTitle.setText(title); // 这里显示标题
+            marqueeTextView_musicArtist.setText(artist);
            // Intent intent = new Intent(MusicActivity.this, MusicService.class); // 定义Intent对象，跳转到PlayerActivity
             Intent intent = new Intent(this,MusicService.class); // 定义Intent对象，跳转到PlayerActivity
-            intent.setAction("com.example.playaudiotest.MUSIC_SERVICE");
             // 添加一系列要传递的数据
-            intent.putExtra("title", mp3Info.getTitle());
+            intent.putExtra("title", title);
             intent.putExtra("url", mp3Info.getUrl());
-            intent.putExtra("artist", mp3Info.getArtist());
-            intent.putExtra("musicPosition", listPosition);
-            intent.putExtra("MSG", Constant.PLAY_MSG);
-            Toast.makeText(this,"onItemClick",Toast.LENGTH_SHORT).show();
+            intent.putExtra("artist", artist);
+            intent.putExtra("musicPosition", musicPosition);
+            intent.putExtra("MSG", Constant.INIT_MSG);
             startService(intent);
         }
     }
@@ -223,6 +254,8 @@ public class MusicActivity extends AppCompatActivity implements View.OnClickList
                         startService(intent);
                         isPlaying=true;
                         isPause=false;
+                    } else {
+                        Toast.makeText(this,"有bug！！！",Toast.LENGTH_LONG).show();
                     }
                 }
                 break;
@@ -239,6 +272,13 @@ public class MusicActivity extends AppCompatActivity implements View.OnClickList
                 isPause=false;
                 previous();
                 break;
+            case R.id.button_back:
+                Intent intent2=new Intent(this,MainActivity.class);
+                intent2.putExtra("title",title);
+                intent2.putExtra("artist",artist);
+                intent2.putExtra("musicPosition",musicPosition);
+                startActivity(intent2);
+
             default:
                 break;
         }
@@ -250,8 +290,11 @@ public class MusicActivity extends AppCompatActivity implements View.OnClickList
         Mp3 mp3Info = mp3Infos.get(musicPosition);
         // musicPosition是当前要播放的歌曲的位置，然后从MP3infos 中找到这个对象，将这个对象的信息传递到intent中，发送到服务里。
 
-        marqueeTextView_musicTitle.setText(mp3Info.getTitle());
-        marqueeTextView_musicArtist.setText(mp3Info.getArtist());
+
+        title=mp3Info.getTitle();
+        artist=mp3Info.getArtist();
+        marqueeTextView_musicTitle.setText(title); // 这里显示标题
+        marqueeTextView_musicArtist.setText(artist);
         Intent intent = new Intent(this,MusicService.class);
 
         intent.putExtra("musicPosition", 0);
@@ -277,7 +320,10 @@ public class MusicActivity extends AppCompatActivity implements View.OnClickList
     private void next(){
         musicPosition=musicPosition+1;
         Mp3 mp3Info = mp3Infos.get(musicPosition);
-        marqueeTextView_musicTitle.setText(mp3Info.getTitle());
+        title=mp3Info.getTitle();
+        artist=mp3Info.getArtist();
+        marqueeTextView_musicTitle.setText(title); // 这里显示标题
+        marqueeTextView_musicArtist.setText(artist);
         Intent intent = new Intent(this,MusicService.class);
         intent.putExtra("musicPosition", musicPosition);
         intent.putExtra("url", mp3Info.getUrl());
@@ -291,7 +337,10 @@ public class MusicActivity extends AppCompatActivity implements View.OnClickList
     private void previous(){
         musicPosition=musicPosition-1;
         Mp3 mp3Info = mp3Infos.get(musicPosition);
-        marqueeTextView_musicTitle.setText(mp3Info.getTitle());
+        title=mp3Info.getTitle();
+        artist=mp3Info.getArtist();
+        marqueeTextView_musicTitle.setText(title); // 这里显示标题
+        marqueeTextView_musicArtist.setText(artist);
         Intent intent = new Intent(this,MusicService.class);
         intent.putExtra("musicPosition", musicPosition);
         intent.putExtra("url", mp3Info.getUrl());

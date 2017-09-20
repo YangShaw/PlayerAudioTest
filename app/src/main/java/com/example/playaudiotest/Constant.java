@@ -9,4 +9,5 @@ public class Constant {
     final static int PAUSE_MSG=2;
     final static int PREVIOUS_MSG=3;
     final static int NEXT_MSG=4;
+    final static int INIT_MSG=5;
 }

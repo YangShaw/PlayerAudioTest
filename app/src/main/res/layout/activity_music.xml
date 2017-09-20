@@ -19,6 +19,12 @@
             android:text="我的音乐"
             android:textSize="18sp"
             android:textColor="#000" />
+        <Button
+            android:id="@+id/button_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="返回"
+            />
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="20dp"
